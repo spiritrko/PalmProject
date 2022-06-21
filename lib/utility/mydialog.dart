@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:palmpea/utility/my_constant.dart';

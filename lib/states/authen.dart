@@ -56,8 +56,8 @@ class _AuthenState extends State<Authen> {
           print('user = $user, password = $password');
           if ((user?.isEmpty ?? true) || (password?.isEmpty ?? true)) {
             print('Have Space');
-            Mydialog(buildContext: context)
-                .nomalDialog(title: 'Error', subtitle: 'Have space');
+            Mydialog(context: context)
+                .normalDialog(title: 'กรอก', subTitle: 'subtitle');
           } else {
             print('Have Space');
           }
