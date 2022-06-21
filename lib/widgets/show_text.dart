@@ -13,6 +13,6 @@ class ShowTest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text, style: textStyle ?? MyConstant().h1Style(),);
+    return Text(text, style: textStyle ?? MyConstant().h1Style(),);//รีเทรินค่า text เเละ style จากหน้า My_Constant.dart
   }
 }
