@@ -1,8 +1,29 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:palmpea/states/authen.dart';
+import 'package:palmpea/states/my_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(MyApp());//class MyApp ทำงานก่อน
+final Map<String, WidgetBuilder> map = {
+  '/authen': (context) => const Authen(),
+  '/myService': (context) => const Myservice(),
+};
+String? firstState;
+Future<void> main() async {
+  HttpOverrides.global = MyHttpOverride();
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  var result = preferences.getStringList('data');
+  print('result = $result');
+  if (result == null) {
+    firstState = '/authen';
+    runApp(MyApp());
+  } else {
+    firstState = '/myService';
+    runApp(MyApp());
+  }
+  runApp(MyApp()); //class MyApp ทำงานก่อน
 } //main ชื่อตรงกับ ชื่อหน้าทำก่อนเสมอ
 
 class MyApp extends StatelessWidget {
@@ -10,8 +31,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Authen(),
+    return MaterialApp(debugShowCheckedModeBanner: false,
+      routes: map,
+      initialRoute: firstState,
     );
+  }
+}
+
+class MyHttpOverride extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    // TODO: implement createHttpClient
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (cert, host, port) => true;
   }
 }

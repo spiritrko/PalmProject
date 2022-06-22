@@ -1,10 +1,16 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:palmpea/models/user_model.dart';
+import 'package:palmpea/states/my_service.dart';
 import 'package:palmpea/utility/my_constant.dart';
 import 'package:palmpea/utility/mydialog.dart';
 import 'package:palmpea/widgets/show_button.dart';
 import 'package:palmpea/widgets/show_form.dart';
 import 'package:palmpea/widgets/show_image.dart';
 import 'package:palmpea/widgets/show_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Authen extends StatefulWidget {
   const Authen({Key? key}) : super(key: key);
@@ -59,11 +65,60 @@ class _AuthenState extends State<Authen> {
             Mydialog(context: context)
                 .normalDialog(title: 'กรอก', subTitle: 'subtitle');
           } else {
-            print('Have Space');
+            print('No Space');
+            processCheckLogin();
           }
         },
       ),
     );
+  }
+
+  Future<void> processCheckLogin() async {
+    String path =
+        'https://www.androidthai.in.th/egat/getUserWhereUserpalm.php?isAdd=true&user=$user';
+    await Dio().get(path).then((value) {
+      print('value ==> $value');
+
+      if (value.toString() == 'null') {
+        Mydialog(context: context).normalDialog(
+            title: 'User False', subTitle: 'No $user in my Database');
+      } else {
+        var result = json.decode(value.data);
+        print(result);
+        for (var element in result) {
+          UserModel userModel = UserModel.fromMap(element);
+          if (password == userModel.password) {
+            Mydialog(context: context).normalDialog(
+                pressFunc: () async {
+                  SharedPreferences preferences =
+                      await SharedPreferences.getInstance();
+                  var data = <String>[];
+                  data.add(userModel.id);
+                  data.add(userModel.name);
+                  data.add(userModel.position);
+
+                  preferences.setStringList('data', data).then(
+                    (value) {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Myservice(),
+                          ),
+                          (route) => false);
+                    },
+                  );
+                },
+                title: 'Login Success Welcome',
+                subTitle: 'Login Success Welcom ${userModel.name}',label: 'login');
+          } else {
+            Mydialog(context: context).normalDialog(
+                title: 'Password False',
+                subTitle: 'Please Try Again',
+                label: 'Exits');
+          }
+        }
+      }
+    });
   }
 
   Container formPassword(BoxConstraints boxConstraints) {
