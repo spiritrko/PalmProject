@@ -20,10 +20,11 @@ class Authen extends StatefulWidget {
 }
 
 class _AuthenState extends State<Authen> {
-  bool redEye = true;
+  bool redEye = true; //bool ใช้กับ true false เท่านั้น
   String? user, password;
   @override
   Widget build(BuildContext context) {
+    //ทำหน้าที่เหมือน pageload
     return Scaffold(
       body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints boxConstraints) {
@@ -38,11 +39,11 @@ class _AuthenState extends State<Authen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  newLogo(boxConstraints),
-                  newTitle(boxConstraints),
-                  formUser(boxConstraints),
-                  formPassword(boxConstraints),
-                  buttonLogin(boxConstraints),
+                  newLogo(boxConstraints), //call logo
+                  newTitle(boxConstraints), //call new title
+                  formUser(boxConstraints), //call formUser
+                  formPassword(boxConstraints), //callPassword
+                  buttonLogin(boxConstraints), //call Button login
                 ],
               ),
             ),
@@ -53,12 +54,14 @@ class _AuthenState extends State<Authen> {
   }
 
   Container buttonLogin(BoxConstraints boxConstraints) {
+    //ปุ่ม login
     return Container(
-      margin: const EdgeInsets.only(top: 16),
+      margin: const EdgeInsets.only(top: 16), //กำหนดขนาด
       width: boxConstraints.maxWidth * 0.6,
       child: ShowButtom(
         label: 'Login',
         pressFunc: () {
+          //เป็นฟังก์ชันกดเเล้วได้ไร ไม่กรอกเเล้วขึ้นอะไร
           print('user = $user, password = $password');
           if ((user?.isEmpty ?? true) || (password?.isEmpty ?? true)) {
             print('Have Space');
@@ -66,7 +69,7 @@ class _AuthenState extends State<Authen> {
                 .normalDialog(title: 'กรอก', subTitle: 'subtitle');
           } else {
             print('No Space');
-            processCheckLogin();
+            processCheckLogin(); //เรียก processCheckLogin
           }
         },
       ),
@@ -74,6 +77,7 @@ class _AuthenState extends State<Authen> {
   }
 
   Future<void> processCheckLogin() async {
+    //การ login เพื่อเช็คค่าในดาต้าเบสโดยการเรียก service
     String path =
         'https://www.androidthai.in.th/egat/getUserWhereUserpalm.php?isAdd=true&user=$user';
     await Dio().get(path).then((value) {
@@ -109,12 +113,13 @@ class _AuthenState extends State<Authen> {
                   );
                 },
                 title: 'Login Success Welcome',
-                subTitle: 'Login Success Welcom ${userModel.name}',label: 'login');
+                subTitle: 'Login Success Welcom ${userModel.name}',
+                lable: 'login');
           } else {
             Mydialog(context: context).normalDialog(
                 title: 'Password False',
                 subTitle: 'Please Try Again',
-                label: 'Exits');
+                lable: 'Exits');
           }
         }
       }
@@ -162,9 +167,9 @@ class _AuthenState extends State<Authen> {
       width: boxConstraints.maxWidth * 0.6,
       child: Row(
         children: [
-          ShowTest(
+          ShowText(
             text: 'Login :',
-            textStyle: MyConstant().h1Style(),
+            textStlye: MyConstant().h1Style(),
           ),
         ],
       ),

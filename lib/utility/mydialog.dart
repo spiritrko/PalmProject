@@ -11,13 +11,13 @@ class Mydialog {
   Mydialog({
     required this.context,
   });
-  Future<void> normalDialog({
-    required String title,
-    required String subTitle,
-    String? label,
-    Function()? pressFunc
-
-  }) async {
+  Future<void> normalDialog(
+      {required String title,
+      required String subTitle,
+      String? lable,
+      String? lable2,
+      Function()? pressFunc2,
+      Function()? pressFunc}) async {
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -26,28 +26,28 @@ class Mydialog {
             width: 80,
             child: ShowImage(),
           ),
-          title: ShowTest(
+          title: ShowText(
             text: title,
-            textStyle: MyConstant().h2Style(),
+            textStlye: MyConstant().h1Style(),
           ),
-          subtitle: ShowTest(text: subTitle),
+          subtitle: ShowText(
+            text: subTitle,
+            textStlye: MyConstant().h1Style(),
+          ),
         ),
         actions: [
-
-pressFunc == null?
-          ShowTextButton(
-              label: label!,
-              pressFunc: () {
-                Navigator.pop(context);
-              }) : ShowTextButton(
-              label: label!,
-              pressFunc: pressFunc
-              // () {
-              //   //Navigator.pop(context);
-              // },
-              )
-
-
+          pressFunc == null
+              ? ShowTextButton(
+                  label: lable!,
+                  pressFunc: () {
+                    Navigator.pop(context);
+                  })
+              : ShowTextButton(label: lable!, pressFunc: pressFunc
+                  // () {
+                  //   //Navigator.pop(context);
+                  // },
+                  ),
+                  pressFunc2 == null ? const SizedBox(): ShowTextButton(label: lable2!, pressFunc: pressFunc2) 
         ],
       ),
     );

@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:palmpea/widgets/show_text.dart';
 
+import '../utility/my_constant.dart';
+
 class ShowTextButton extends StatelessWidget {
   final String label;
   final Function() pressFunc;
@@ -13,6 +15,11 @@ class ShowTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(onPressed: pressFunc, child: ShowTest(text: label));
+    return TextButton(
+        onPressed: pressFunc,
+        child: ShowText(
+          text: label,
+          textStlye: MyConstant().h1Style(),
+        ));
   }
 }

@@ -21,7 +21,7 @@ class MyConstant {
   TextStyle h1Style() {
     //เเบบตัวอักษร
     return GoogleFonts.mali(
-      fontSize: 36,
+      fontSize: 13,
       color: dark,
       fontWeight: FontWeight.bold,
     );
@@ -29,7 +29,7 @@ class MyConstant {
 
   TextStyle h2Style() {
     return GoogleFonts.mali(
-      fontSize: 36,
+      fontSize: 13,
       color: dark,
       fontWeight: FontWeight.w700,
     );
@@ -37,7 +37,7 @@ class MyConstant {
 
   TextStyle h3Style() {
     return GoogleFonts.mali(
-      fontSize: 36,
+      fontSize: 13,
       color: dark,
       fontWeight: FontWeight.normal,
     );
@@ -46,7 +46,7 @@ class MyConstant {
   TextStyle h3ActiveStyle() {
     return GoogleFonts.mali(
       textStyle: TextStyle(
-        fontSize: 14,
+        fontSize: 13,
         color: active,
         fontWeight: FontWeight.normal,
       ),

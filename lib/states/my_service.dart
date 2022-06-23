@@ -4,6 +4,7 @@ import 'package:palmpea/bodys/non_finish_job.dart';
 import 'package:palmpea/utility/my_constant.dart';
 import 'package:palmpea/utility/mydialog.dart';
 import 'package:palmpea/widgets/show_icon_button.dart';
+import 'package:palmpea/widgets/show_progress.dart';
 import 'package:palmpea/widgets/show_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,31 +18,47 @@ class Myservice extends StatefulWidget {
 class _MyserviceState extends State<Myservice> {
   var titles = <String>['nonefinish', 'finish'];
   var iconDatas = <IconData>[Icons.close, Icons.done];
-  var widgets = <Widget>[const NonFinishJob(), const FinisJob()];
+  var widgets = <Widget>[];
   var buttonNavigatorBarItemss = <BottomNavigationBarItem>[];
   int indexBodys = 0;
 
   @override
   void initState() {
     super.initState();
-    // for (var i = 0; i < 
-    //.length; i++) {
-    //   buttonNavigatorBarItemss.add(
-    //     BottomNavigationBarItem(
-    //       icon: Icon(iconDatas[i]),
-    //     ),
-    //   );
-    // }
+    createNavBar();
+    processFindUserLogin();
+  }
+
+  Future<void> processFindUserLogin() async {
+    //เช็ค login ที่เก็บไว้ใน preferences เก็บประวัติ
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var dataLogins = preferences.getStringList('data');
+    print('dataLogins ==> $dataLogins');
+    widgets.add(NonFinishJob(dataUserLogins: dataLogins!));
+    widgets.add(FinisJob());
+    setState(() {});
+  }
+
+  void createNavBar() {
+    //สร้าง navbar button
+    for (var i = 0; i < titles.length; i++) {
+      buttonNavigatorBarItemss.add(
+        BottomNavigationBarItem(
+          label: titles[i],
+          icon: Icon(
+            iconDatas[i],
+          ),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: newAppbar(context),
-      body: widgets[indexBodys],
+      body: widgets.isEmpty ? const ShowProgress() : widgets[indexBodys],
       bottomNavigationBar: BottomNavigationBar(
-          currentIndex: indexBodys,
           items: buttonNavigatorBarItemss,
           onTap: (value) {
             setState(() {
@@ -53,9 +70,10 @@ class _MyserviceState extends State<Myservice> {
 
   AppBar newAppbar(BuildContext context) {
     return AppBar(
-      title: ShowTest(
+      centerTitle: true,
+      title: ShowText(
         text: titles[indexBodys],
-        textStyle: MyConstant().h2Style(),
+        textStlye: MyConstant().h2Style(),
       ),
       elevation: 0,
       foregroundColor: Colors.black54,
@@ -67,7 +85,7 @@ class _MyserviceState extends State<Myservice> {
               Mydialog(context: context).normalDialog(
                   title: 'Exit',
                   subTitle: 'ยืนยันการออกจากระบบ',
-                  label: 'sign out',
+                  lable: 'sign out',
                   pressFunc: () async {
                     SharedPreferences preferrence =
                         await SharedPreferences.getInstance();
